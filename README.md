@@ -8,6 +8,22 @@ Các nguồn hiện tại:
 Bach Hoa Xanh | GO! | Lotte Mart | MM Mega Market | WinMart
 ```
 
+## Mục lục
+
+- [Mục tiêu dự án](#1-mục-tiêu-dự-án)
+- [Kiến trúc hệ thống](#2-kiến-trúc-hệ-thống)
+- [Mô hình dữ liệu](#3-mô-hình-dữ-liệu)
+- [Cấu trúc thư mục](#4-cấu-trúc-thư-mục)
+- [Cài đặt](#5-cài-đặt)
+- [Cách chạy](#6-cách-chạy)
+- [Validate](#7-validate)
+- [Publish lên MinIO](#8-publish-lên-minio)
+- [Airflow hằng ngày](#9-airflow-hằng-ngày)
+- [Demo output](#10-demo-hình-ảnh-project)
+- [Giới hạn hiện tại](#11-giới-hạn-hiện-tại)
+- [Tài liệu chi tiết](#12-tài-liệu-chi-tiết)
+- [Trạng thái project](#13-trạng-thái-project)
+
 ## 1. Mục tiêu dự án
 
 Pipeline hỗ trợ các câu hỏi nghiệp vụ:
@@ -266,7 +282,7 @@ Airflow chạy DAG `daily_supermarket_lakehouse` lúc `06:00` theo giờ Việt 
 bash scripts/setup_airflow.sh
 ```
 
-Web UI mặc định: `http://127.0.0.1:8088`. Chi tiết task, rerun cùng `run_id` và publish gate nằm ở [airflow_daily_orchestration.md](docs/pipeline/airflow_daily_orchestration.md).
+Web UI mặc định: `http://127.0.0.1:8088`. Chi tiết task, rerun cùng `run_id` và publish gate nằm trong file local `docs/pipeline/airflow_daily_orchestration.md`.
 
 Trước một run local có publish, MinIO phải hoạt động:
 
@@ -275,15 +291,9 @@ docker start minio-local
 curl --fail http://127.0.0.1:9020/minio/health/live
 ```
 
-Khi task fail, mở Grid trên UI, điều tra task đỏ đầu tiên rồi chọn retry/clear đúng boundary. Không dùng `Mark Success` để bỏ qua validation hoặc publish fail. Các bước thao tác cụ thể nằm trong [tài liệu học Airflow](docs/learning/airflow_tu_co_ban_den_van_hanh_dag.md).
+Khi task fail, mở Grid trên UI, điều tra task đỏ đầu tiên rồi chọn retry/clear đúng boundary. Không dùng `Mark Success` để bỏ qua validation hoặc publish fail. Hướng dẫn học/vận hành chi tiết hiện nằm ở file local `docs/learning/airflow_tu_co_ban_den_van_hanh_dag.md`.
 
 ## 10. Demo hình ảnh project
-
-### Ảnh raw payload từ WinMart
-
-Ảnh dưới đây là screenshot payload/page thu được trong quá trình crawl WinMart:
-
-![WinMart crawl raw payload](raw/store=winmart/date=2026-06-26/run_id=20260626_091014/raw_payloads/page.png)
 
 ### Output của một run
 
@@ -312,17 +322,13 @@ Khi demo nên đối chiếu:
 
 ## 12. Tài liệu chi tiết
 
-- [Docs index](docs/README.md)
-- [Complete Hudi pipeline](docs/pipeline/complete_hudi_pipeline.md)
-- [MinIO publish runbook](docs/pipeline/minio_hudi_publish_runbook.md)
-- [Hudi history design](docs/pipeline/hudi_history_design.md)
-- [Lakehouse design](docs/lakehouse/lakehouse_hudi_pipeline_design.md)
-- [Silver table catalog](docs/lakehouse/lakehouse_table_catalog.md)
-- [Pipeline runbook](docs/pipeline/runbook_chay_pipeline_da_retailer.md)
-- [Airflow từ cơ bản đến vận hành DAG](docs/learning/airflow_tu_co_ban_den_van_hanh_dag.md)
-- [Airflow DAG và pipeline reliability register](docs/pipeline/dag_pipeline_reliability_risk_register.md)
-- [Airflow daily orchestration](docs/pipeline/airflow_daily_orchestration.md)
-- [Project task log](docs/logs/project_task_log.md)
+Thư mục `docs/` hiện được giữ local và không nằm trong baseline GitHub. Các tài liệu vận hành chi tiết có sẵn sau khi clone workspace đầy đủ:
+
+- `docs/pipeline/complete_hudi_pipeline.md`
+- `docs/pipeline/minio_hudi_publish_runbook.md`
+- `docs/pipeline/airflow_daily_orchestration.md`
+- `docs/pipeline/dag_pipeline_reliability_risk_register.md`
+- `docs/learning/airflow_tu_co_ban_den_van_hanh_dag.md`
 
 ## 13. Trạng thái project
 
