@@ -15,7 +15,7 @@ jobs:
     name: Python tests and syntax
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -39,7 +39,7 @@ jobs:
       AIRFLOW_IMAGE: supermarket-airflow:ci
       SPARK_IMAGE: supermarket-spark:ci
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Validate Spark Compose
         run: docker compose -f infra/spark/docker-compose.yml config --quiet
       - name: Validate Airflow Compose
@@ -51,7 +51,7 @@ jobs:
     name: Secret scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - uses: gitleaks/gitleaks-action@v2
@@ -62,7 +62,7 @@ jobs:
     name: Python dependency audit
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"

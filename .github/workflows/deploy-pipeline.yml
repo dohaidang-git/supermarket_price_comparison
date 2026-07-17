@@ -26,7 +26,7 @@ jobs:
       IMAGE_OWNER: ${{ github.repository_owner }}
       GIT_REF: ${{ inputs.git_ref || github.sha }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ env.GIT_REF }}
       - id: revision
