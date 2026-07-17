@@ -13,6 +13,10 @@ if [[ ! -S "$docker_socket" ]]; then
 fi
 docker_gid="$(stat -c '%g' "$docker_socket")"
 
+generate_secret() {
+  python3 -c 'import secrets; print(secrets.token_urlsafe(32))'
+}
+
 # Airflow runs as UID 50000 inside its image. Grant that user access only to
 # runtime data directories; source code remains owned by the host user.
 for runtime_dir in raw warehouse .state; do
@@ -23,19 +27,36 @@ done
 
 if [[ -f "$ENV_FILE" ]]; then
   sed -i "s/^DOCKER_GID=.*/DOCKER_GID=$docker_gid/" "$ENV_FILE"
+  for setting in \
+    "MINIO_ENDPOINT=http://127.0.0.1:9020" \
+    "MINIO_BUCKET=supermarket-lakehouse" \
+    "MINIO_ACCESS_KEY=minioadmin" \
+    "MINIO_SECRET_KEY="; do
+    key="${setting%%=*}"
+    grep -q "^${key}=" "$ENV_FILE" || printf '%s\n' "$setting" >> "$ENV_FILE"
+  done
   echo "Keeping existing $ENV_FILE"
+  echo "Verify MINIO_SECRET_KEY in $ENV_FILE before running the MinIO publish task."
 else
   umask 077
+  airflow_webserver_secret="$(generate_secret)"
+  airflow_admin_password="$(generate_secret)"
   printf '%s\n' \
     "PROJECT_ROOT=$ROOT" \
     "AIRFLOW_UID=50000" \
     "DOCKER_GID=$docker_gid" \
     "AIRFLOW_WEBSERVER_PORT=8088" \
-    "AIRFLOW_WEBSERVER_SECRET_KEY=replace-with-a-long-random-secret" \
+    "AIRFLOW_WEBSERVER_SECRET_KEY=$airflow_webserver_secret" \
     "AIRFLOW_ADMIN_USERNAME=admin" \
-    "AIRFLOW_ADMIN_PASSWORD=change-this-password" \
-    "AIRFLOW_ADMIN_EMAIL=admin@example.local" > "$ENV_FILE"
+    "AIRFLOW_ADMIN_PASSWORD=$airflow_admin_password" \
+    "AIRFLOW_ADMIN_EMAIL=admin@example.local" \
+    "MINIO_ENDPOINT=http://127.0.0.1:9020" \
+    "MINIO_BUCKET=supermarket-lakehouse" \
+    "MINIO_ACCESS_KEY=minioadmin" \
+    "MINIO_SECRET_KEY=" > "$ENV_FILE"
   echo "Created $ENV_FILE"
+  echo "Airflow admin password was generated in $ENV_FILE. Store it in a password manager."
+  echo "Set MINIO_SECRET_KEY in $ENV_FILE before running the MinIO publish task."
 fi
 
 docker compose --env-file "$ENV_FILE" -f "$AIRFLOW_DIR/docker-compose.yml" build

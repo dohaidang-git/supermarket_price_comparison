@@ -1,0 +1,21 @@
+title = "Supermarket Price Comparison Gitleaks configuration"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Historical non-secret development placeholders replaced by required runtime configuration"
+condition = "AND"
+regexes = [
+  '''change-this-password''',
+  '''change-this-before-production''',
+  '''replace-with-a-long-random-secret''',
+  '''replace-with-a-strong-password''',
+]
+paths = [
+  '''infra/airflow/\.env\.example''',
+  '''infra/airflow/docker-compose\.yml''',
+  '''infra/minio/\.env\.example''',
+  '''scripts/publish_hudi_to_minio\.sh''',
+  '''scripts/setup_airflow\.sh''',
+]

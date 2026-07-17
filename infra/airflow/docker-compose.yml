@@ -10,11 +10,15 @@ x-airflow-common: &airflow-common
     AIRFLOW__CORE__DEFAULT_TIMEZONE: Asia/Ho_Chi_Minh
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
     AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "false"
-    AIRFLOW__WEBSERVER__SECRET_KEY: ${AIRFLOW_WEBSERVER_SECRET_KEY:-change-this-before-production}
+    AIRFLOW__WEBSERVER__SECRET_KEY: ${AIRFLOW_WEBSERVER_SECRET_KEY:?Set AIRFLOW_WEBSERVER_SECRET_KEY in infra/airflow/.env}
     AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK: "true"
     PROJECT_ROOT: ${PROJECT_ROOT}
     PYTHONPATH: ${PROJECT_ROOT}
     PIPELINE_ALERT_WEBHOOK_URL: ${PIPELINE_ALERT_WEBHOOK_URL:-}
+    MINIO_ENDPOINT: ${MINIO_ENDPOINT:-http://127.0.0.1:9020}
+    MINIO_BUCKET: ${MINIO_BUCKET:-supermarket-lakehouse}
+    MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minioadmin}
+    MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-}
   # Airflow needs a real passwd entry. The image's built-in airflow user is UID 50000.
   user: "50000:0"
   group_add:
@@ -61,7 +65,7 @@ services:
         airflow db migrate
         airflow users create \
           --username "$${AIRFLOW_ADMIN_USERNAME:-admin}" \
-          --password "$${AIRFLOW_ADMIN_PASSWORD:-admin}" \
+          --password "$${AIRFLOW_ADMIN_PASSWORD:?Set AIRFLOW_ADMIN_PASSWORD in infra/airflow/.env}" \
           --firstname Data \
           --lastname Admin \
           --role Admin \

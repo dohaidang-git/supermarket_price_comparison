@@ -15,8 +15,8 @@ jobs:
     name: Python tests and syntax
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
           cache: pip
@@ -39,11 +39,18 @@ jobs:
       AIRFLOW_IMAGE: supermarket-airflow:ci
       SPARK_IMAGE: supermarket-spark:ci
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Validate Spark Compose
         run: docker compose -f infra/spark/docker-compose.yml config --quiet
       - name: Validate Airflow Compose
-        run: docker compose -f infra/airflow/docker-compose.yml config --quiet
+        run: |
+          env_file="$RUNNER_TEMP/airflow-ci.env"
+          cp infra/airflow/.env.example "$env_file"
+          sed -i "s|^PROJECT_ROOT=.*|PROJECT_ROOT=$GITHUB_WORKSPACE|; s|^DOCKER_GID=.*|DOCKER_GID=0|" "$env_file"
+          for key in AIRFLOW_WEBSERVER_SECRET_KEY AIRFLOW_ADMIN_PASSWORD MINIO_SECRET_KEY; do
+            sed -i "s|^$key=.*|$key=$(openssl rand -hex 32)|" "$env_file"
+          done
+          docker compose --env-file "$env_file" -f infra/airflow/docker-compose.yml config --quiet
       - name: Validate MinIO Compose
         run: docker compose --env-file infra/minio/.env.example -f infra/minio/docker-compose.yml config --quiet
 
@@ -51,10 +58,12 @@ jobs:
     name: Secret scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - uses: gitleaks/gitleaks-action@v2
+        with:
+          config-path: .gitleaks.toml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -62,8 +71,8 @@ jobs:
     name: Python dependency audit
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Audit runtime dependencies

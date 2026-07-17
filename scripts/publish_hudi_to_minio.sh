@@ -8,7 +8,7 @@ RUN_ID=""
 MINIO_ENDPOINT="${MINIO_ENDPOINT:-http://127.0.0.1:9020}"
 MINIO_BUCKET="${MINIO_BUCKET:-supermarket-lakehouse}"
 MINIO_ACCESS_KEY="${MINIO_ACCESS_KEY:-minioadmin}"
-MINIO_SECRET_KEY="${MINIO_SECRET_KEY:-change-this-password}"
+MINIO_SECRET_KEY="${MINIO_SECRET_KEY:-}"
 PYTHON_BIN="${PYTHON_BIN:-$ROOT/.venv/bin/python}"
 
 usage() {
@@ -28,6 +28,7 @@ done
 
 [[ -n "$RUN_DATE" && -n "$RUN_ID" ]] || { usage; exit 2; }
 [[ -x "$PYTHON_BIN" ]] || { echo "Python not found: $PYTHON_BIN" >&2; exit 2; }
+[[ -n "$MINIO_SECRET_KEY" ]] || { echo "MINIO_SECRET_KEY must be set in the environment." >&2; exit 2; }
 
 MANIFEST="$ROOT/warehouse/pipeline_runs/date=$RUN_DATE/run_id=$RUN_ID/manifest.json"
 [[ -f "$MANIFEST" ]] || { echo "Missing pipeline manifest: $MANIFEST" >&2; exit 1; }
