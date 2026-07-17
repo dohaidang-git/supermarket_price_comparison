@@ -1,4 +1,5 @@
 x-airflow-common: &airflow-common
+  image: ${AIRFLOW_IMAGE:-supermarket-airflow:local}
   build:
     context: ../..
     dockerfile: infra/airflow/Dockerfile
@@ -13,6 +14,7 @@ x-airflow-common: &airflow-common
     AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK: "true"
     PROJECT_ROOT: ${PROJECT_ROOT}
     PYTHONPATH: ${PROJECT_ROOT}
+    PIPELINE_ALERT_WEBHOOK_URL: ${PIPELINE_ALERT_WEBHOOK_URL:-}
   # Airflow needs a real passwd entry. The image's built-in airflow user is UID 50000.
   user: "50000:0"
   group_add:

@@ -1,0 +1,20 @@
+name: Spark Hudi Integration Fixture
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  fixture:
+    name: Spark to Hudi fixture
+    runs-on: [self-hosted, supermarket-pipeline]
+    concurrency:
+      group: spark-hudi-fixture
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run sanitized Spark/Hudi fixture
+        run: bash scripts/run_spark_fixture_integration.sh

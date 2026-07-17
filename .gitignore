@@ -2,6 +2,7 @@
 __pycache__/
 *.pyc
 .state/
+backups/
 infra/airflow/.env
 .codegraph/
 .ipynb_checkpoints/
@@ -20,6 +21,7 @@ warehouse_spark_docker/*
 warehouse_spark_debug/
 warehouse_spark_dimension_test/
 warehouse_spark_docker_phase3/
+warehouse_spark_fixture/
 
 # Local notes are not required to run the pipeline.
 I want an app that tracks.txt

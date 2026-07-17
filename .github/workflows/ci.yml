@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  python-tests:
+    name: Python tests and syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - name: Install test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt pyspark==3.5.6
+      - name: Compile pipeline source
+        run: python -m compileall -q jobs scrapers scripts
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
+
+  compose-config:
+    name: Docker Compose configuration
+    runs-on: ubuntu-latest
+    env:
+      PROJECT_ROOT: ${{ github.workspace }}
+      DOCKER_GID: "0"
+      AIRFLOW_IMAGE: supermarket-airflow:ci
+      SPARK_IMAGE: supermarket-spark:ci
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Spark Compose
+        run: docker compose -f infra/spark/docker-compose.yml config --quiet
+      - name: Validate Airflow Compose
+        run: docker compose -f infra/airflow/docker-compose.yml config --quiet
+      - name: Validate MinIO Compose
+        run: docker compose --env-file infra/minio/.env.example -f infra/minio/docker-compose.yml config --quiet
+
+  secret-scan:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  dependency-audit:
+    name: Python dependency audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Audit runtime dependencies
+        run: |
+          python -m pip install --upgrade pip pip-audit
+          pip-audit -r requirements.txt

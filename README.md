@@ -19,10 +19,11 @@ Bach Hoa Xanh | GO! | Lotte Mart | MM Mega Market | WinMart
 - [Validate](#7-validate)
 - [Publish lên MinIO](#8-publish-lên-minio)
 - [Airflow hằng ngày](#9-airflow-hằng-ngày)
-- [Demo output](#10-demo-hình-ảnh-project)
-- [Giới hạn hiện tại](#11-giới-hạn-hiện-tại)
-- [Tài liệu chi tiết](#12-tài-liệu-chi-tiết)
-- [Trạng thái project](#13-trạng-thái-project)
+- [CI/CD GitHub](#10-cicd-github)
+- [Demo output](#11-demo-hình-ảnh-project)
+- [Giới hạn hiện tại](#12-giới-hạn-hiện-tại)
+- [Tài liệu chi tiết](#13-tài-liệu-chi-tiết)
+- [Trạng thái project](#14-trạng-thái-project)
 
 ## 1. Mục tiêu dự án
 
@@ -293,7 +294,20 @@ curl --fail http://127.0.0.1:9020/minio/health/live
 
 Khi task fail, mở Grid trên UI, điều tra task đỏ đầu tiên rồi chọn retry/clear đúng boundary. Không dùng `Mark Success` để bỏ qua validation hoặc publish fail. Hướng dẫn học/vận hành chi tiết hiện nằm ở file local `docs/learning/airflow_tu_co_ban_den_van_hanh_dag.md`.
 
-## 10. Demo hình ảnh project
+## 10. CI/CD GitHub
+
+Repository có các workflow sau trong `.github/workflows/`:
+
+| Workflow | Trigger | Vai trò |
+|---|---|---|
+| `CI` | Pull request và push `master` | Unit test, compile Python, Docker Compose config, secret scan, dependency audit |
+| `Build Pipeline Images` | Sau khi CI `master` pass hoặc manual | Build/push image Airflow và Spark lên GHCR theo tag immutable `sha-<commit>` |
+| `Deploy Pipeline Host` | Manual + GitHub Environment approval | Deploy image SHA sang self-hosted runner của máy pipeline |
+| `Spark Hudi Integration Fixture` | Manual | Chạy Spark-to-Hudi với fixture sanitize, không crawl/publish production |
+
+GitHub không chứa raw crawl, warehouse, Hudi, MinIO data hoặc `.env`. Để bật CD, cần tạo branch protection cho `master`, GitHub Environment `pipeline-production`, biến `PIPELINE_DEPLOY_ROOT` và self-hosted runner label `supermarket-pipeline`. Runbook local: `docs/pipeline/github_cicd_setup_runbook.md`.
+
+## 11. Demo hình ảnh project
 
 ### Output của một run
 
@@ -310,7 +324,7 @@ Khi demo nên đối chiếu:
 2. `source_run_id` trong Silver/Gold record.
 3. Commit trong `.hoodie/timeline` và object tương ứng trên MinIO.
 
-## 11. Giới hạn hiện tại
+## 12. Giới hạn hiện tại
 
 - Dữ liệu ưu tiên tập sản phẩm khuyến mãi, chưa phải full catalog của mỗi retailer.
 - Store của các retailer online chưa phải store master đã xác minh; `unknown_store` chỉ là source context.
@@ -320,7 +334,7 @@ Khi demo nên đối chiếu:
 - Airflow orchestration hiện chạy local bằng Docker `LocalExecutor`; chưa có alert tự động, backup metadata database hoặc service lifecycle quản lý MinIO chung với Airflow.
 - Spark/Hudi hiện phù hợp cho local lakehouse và scale thử nghiệm; production serving layer vẫn cần hardening thêm.
 
-## 12. Tài liệu chi tiết
+## 13. Tài liệu chi tiết
 
 Thư mục `docs/` hiện được giữ local và không nằm trong baseline GitHub. Các tài liệu vận hành chi tiết có sẵn sau khi clone workspace đầy đủ:
 
@@ -330,7 +344,7 @@ Thư mục `docs/` hiện được giữ local và không nằm trong baseline G
 - `docs/pipeline/dag_pipeline_reliability_risk_register.md`
 - `docs/learning/airflow_tu_co_ban_den_van_hanh_dag.md`
 
-## 13. Trạng thái project
+## 14. Trạng thái project
 
 Đã có:
 
@@ -346,6 +360,8 @@ Persistent Hudi output
 Hudi logical validation
 MinIO publish script
 Airflow daily DAG: crawl -> build -> validate -> publish
+GitHub CI, GHCR image build, approved self-hosted deploy workflow
+Spark-to-Hudi sanitized integration fixture
 ```
 
 Đang mở rộng:
@@ -355,6 +371,7 @@ Promotion campaign semantics
 Buy-X-get-Y parsing
 Store master và location resolution
 Full historical backfill
-Airflow alerting, backup metadata và dependency health checks
+Kích hoạt branch protection, GitHub Environment và self-hosted runner trên GitHub/host
+Tích hợp webhook alert thực tế và backup retention/restore drill
 BI/data product serving layer
 ```

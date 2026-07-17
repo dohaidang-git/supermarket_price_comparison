@@ -9,6 +9,8 @@ from airflow import DAG
 from airflow.operators.bash import BashOperator
 from airflow.utils.trigger_rule import TriggerRule
 
+from alerting import notify_task_failure
+
 
 TIMEZONE = pendulum.timezone("Asia/Ho_Chi_Minh")
 RETAILERS = ("bachhoaxanh", "go", "lottemart", "mmvietnam")
@@ -45,7 +47,7 @@ with DAG(
     max_active_runs=1,
     max_active_tasks=3,
     dagrun_timeout=timedelta(hours=5),
-    default_args={"owner": "supermarket-data", "retries": 0},
+    default_args={"owner": "supermarket-data", "retries": 0, "on_failure_callback": notify_task_failure},
     render_template_as_native_obj=False,
     tags=["supermarket", "hudi", "daily"],
 ) as dag:

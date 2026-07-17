@@ -1,5 +1,6 @@
 services:
   spark-gold:
+    image: ${SPARK_IMAGE:-supermarket-spark:local}
     build:
       context: ../..
       dockerfile: infra/spark/Dockerfile
