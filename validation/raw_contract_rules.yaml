@@ -1,0 +1,43 @@
+rule_set_name: raw_contract_rules
+rule_set_version: 1
+layer: bronze
+description: >
+  Minimal validation gate for raw JSONL ingestion into Bronze.
+
+block_run:
+  - rule_id: missing_run_id
+    severity: BLOCK_RUN
+    description: Raw run directory or metadata does not provide a run_id.
+  - rule_id: missing_retailer_id
+    severity: BLOCK_RUN
+    description: Retailer/source id cannot be inferred from path or metadata.
+  - rule_id: no_input_jsonl
+    severity: BLOCK_RUN
+    description: No JSONL input files were found for the raw run.
+
+quarantine_record:
+  - rule_id: invalid_json
+    severity: QUARANTINE
+    description: Source line is not valid JSON.
+  - rule_id: store_code_mismatch
+    severity: QUARANTINE
+    description: Record store_code conflicts with run metadata store_code.
+  - rule_id: missing_raw_payload_identity
+    severity: QUARANTINE
+    description: Record has no usable product/promo/source identity for downstream mapping.
+
+warn_record:
+  - rule_id: missing_source_url
+    severity: WARN
+    description: Record has no source_url; lineage still exists through source file and line.
+  - rule_id: missing_observed_at
+    severity: WARN
+    description: Record has no crawl_timestamp/observed_at.
+  - rule_id: package_size_null
+    severity: WARN
+    description: package_size_raw is null; total price can continue but unit price must be blocked later.
+
+gold_gate_notes:
+  - WARN records may continue only if the warning does not affect the target Gold metric.
+  - QUARANTINE records must not enter Silver or Gold until repaired and reprocessed.
+  - BLOCK_RUN stops the whole run because run-level context is not trustworthy.

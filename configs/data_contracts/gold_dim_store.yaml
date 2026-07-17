@@ -1,0 +1,18 @@
+contract_name: gold_dim_store
+contract_version: 1
+layer: gold
+table_name: gold.dim_store
+grain: "1 row = 1 retailer store code"
+record_key:
+  field: store_key
+  strategy: sha256(retailer_id + store_code)
+required_fields: [store_key, retailer_id, store_code, is_active, source_run_id]
+fields:
+  store_key: {type: string, required: true, purpose: Stable Gold store key.}
+  retailer_id: {type: string, required: true, purpose: Owning retailer.}
+  store_code: {type: string, required: true, purpose: Retailer store code or online_default.}
+  store_group_code: {type: string, required: false, purpose: Source store group.}
+  region: {type: string, required: false, purpose: Source region.}
+  is_active: {type: boolean, required: true, purpose: Store observed in source run.}
+  source_run_id: {type: string, required: true, purpose: Lineage.}
+  built_at: {type: timestamp_string, required: true, purpose: Gold build timestamp.}

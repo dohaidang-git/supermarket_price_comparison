@@ -1,0 +1,21 @@
+name: silver_promotion
+version: 1
+grain: one observed product-level promotion offer on one business date
+record_key: promotion_id
+fields:
+  promotion_id: {type: string, required: true}
+  retailer_id: {type: string, required: true}
+  store_code: {type: string, required: true}
+  promotion_scope: {type: string, required: true}
+  promotion_type: {type: string, required: true}
+  offer_text_raw: {type: string, required: false}
+  promotion_start_date: {type: date, required: false}
+  promotion_end_date: {type: date, required: false}
+  observation_date: {type: date, required: true}
+  listed_price: {type: decimal, required: false}
+  promo_price: {type: decimal, required: false}
+  current_price: {type: decimal, required: false}
+  currency: {type: string, required: true}
+  source_run_id: {type: string, required: true}
+  source_bronze_record_key: {type: string, required: true}
+  built_at: {type: timestamp, required: true}

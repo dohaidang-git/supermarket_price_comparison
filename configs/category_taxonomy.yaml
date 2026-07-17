@@ -1,0 +1,37 @@
+version: 1
+# Only reviewed rules belong here. Unlisted categories remain unmapped for review.
+canonical_categories:
+  - {canonical_category_id: food_dry, canonical_category_name: Thuc pham kho va che bien}
+  - {canonical_category_id: dairy, canonical_category_name: Sua va che pham sua}
+  - {canonical_category_id: beverage, canonical_category_name: Do uong}
+  - {canonical_category_id: fresh_food, canonical_category_name: Thuc pham tuoi song}
+  - {canonical_category_id: personal_care, canonical_category_name: Cham soc ca nhan}
+  - {canonical_category_id: home_care, canonical_category_name: Cham soc nha cua va tay rua}
+  - {canonical_category_id: household, canonical_category_name: Do dung gia dinh}
+  - {canonical_category_id: baby_care, canonical_category_name: Cham soc em be}
+  - {canonical_category_id: fashion, canonical_category_name: Thoi trang}
+  - {canonical_category_id: electronics, canonical_category_name: Dien gia dung}
+
+mappings:
+  - {retailer_id: lottemart, match_type: path_prefix, value: THỰC PHẨM KHÔ, canonical_category_id: food_dry}
+  - {retailer_id: lottemart, match_type: path_prefix, value: THỰC PHẨM TƯƠI SỐNG, canonical_category_id: fresh_food}
+  - {retailer_id: lottemart, match_type: path_prefix, value: THỜI TRANG, canonical_category_id: fashion}
+  - {retailer_id: lottemart, match_type: path_prefix, value: HÀNG PHI THỰC PHẨM / Hóa Phẩm, Vệ Sinh, canonical_category_id: home_care}
+  - {retailer_id: go, match_type: exact_leaf, value: Chăm Sóc Cá Nhân, canonical_category_id: personal_care}
+  - {retailer_id: go, match_type: exact_leaf, value: Chăm Sóc Nhà Cửa, canonical_category_id: home_care}
+  - {retailer_id: go, match_type: exact_leaf, value: Đồ Dùng Gia Đình, canonical_category_id: household}
+  - {retailer_id: go, match_type: exact_leaf, value: Đồ Điện Gia Dụng, canonical_category_id: electronics}
+  - {retailer_id: go, match_type: exact_leaf, value: Chăm Sóc Cho Bé, canonical_category_id: baby_care}
+  - {retailer_id: go, match_type: exact_leaf, value: Đồ Uống Các Loại, canonical_category_id: beverage}
+  - {retailer_id: go, match_type: exact_leaf, value: Rau, Củ, Nấm, canonical_category_id: fresh_food}
+  - {retailer_id: go, match_type: exact_leaf, value: Thời Trang, canonical_category_id: fashion}
+  - {retailer_id: winmart, match_type: exact_leaf, value: Chăm Sóc Cá Nhân, canonical_category_id: personal_care}
+  - {retailer_id: winmart, match_type: exact_leaf, value: Hóa Phẩm - Tẩy rửa, canonical_category_id: home_care}
+  - {retailer_id: winmart, match_type: exact_leaf, value: Đồ Dùng Gia Đình, canonical_category_id: household}
+  - {retailer_id: winmart, match_type: exact_leaf, value: Đồ Uống - Giải Khát, canonical_category_id: beverage}
+  - {retailer_id: winmart, match_type: exact_leaf, value: Sữa các loại, canonical_category_id: dairy}
+  - {retailer_id: bachhoaxanh, match_type: exact_leaf, value: Sữa tươi, canonical_category_id: dairy}
+  - {retailer_id: bachhoaxanh, match_type: exact_leaf, value: Sữa chua, canonical_category_id: dairy}
+  - {retailer_id: bachhoaxanh, match_type: exact_leaf, value: Nước ngọt, canonical_category_id: beverage}
+  - {retailer_id: bachhoaxanh, match_type: exact_leaf, value: Nước trà, canonical_category_id: beverage}
+  - {retailer_id: bachhoaxanh, match_type: exact_leaf, value: Nước giặt, canonical_category_id: home_care}

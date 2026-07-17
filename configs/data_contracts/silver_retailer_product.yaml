@@ -1,0 +1,161 @@
+contract_name: silver_retailer_product
+contract_version: 1
+layer: silver
+table_name: silver.retailer_products
+description: >
+  Normalized retailer product/listing contract. One row represents one product
+  SKU/UOM sold by one retailer. It separates selling unit from measurement unit
+  so count-based products and weight/volume products can both be modeled.
+
+grain: "1 row = 1 retailer product SKU/UOM"
+
+record_key:
+  field: retailer_product_id
+  strategy: sha256(retailer_id + source_product_id/item_no + sku + selling_unit_raw)
+
+required_fields:
+  - retailer_product_id
+  - retailer_id
+  - source_product_id
+  - product_name
+  - source_run_id
+  - source_bronze_record_key
+  - package_parse_status
+
+fields:
+  retailer_product_id:
+    type: string
+    required: true
+    purpose: Stable product key inside one retailer.
+  retailer_id:
+    type: string
+    required: true
+    purpose: Retailer/source identifier.
+  source_product_id:
+    type: string
+    required: true
+    purpose: Retailer product id, itemNo, sku, or source uuid.
+  item_no:
+    type: string
+    required: false
+    purpose: WinMart item number when present.
+  sku:
+    type: string
+    required: false
+    purpose: Retailer SKU/UOM code.
+  barcode:
+    type: string
+    required: false
+    purpose: Product barcode/GTIN when present.
+  barcode_source:
+    type: string
+    required: false
+    purpose: Evidence used for barcode, such as source_barcode or sku_gtin_checksum.
+  product_name:
+    type: string
+    required: true
+    purpose: Raw-cleaned product name from source.
+  source_url:
+    type: string
+    required: false
+    purpose: Product detail URL on the retailer website when available.
+  image_url:
+    type: string
+    required: false
+    purpose: Primary product image URL from the retailer source when available.
+  brand:
+    type: string
+    required: false
+    purpose: Brand name from source.
+  category_raw:
+    type: string
+    required: false
+    purpose: Retailer category name.
+  category_path_raw:
+    type: json
+    required: false
+    purpose: Source category breadcrumb path when available; category_raw is its leaf label.
+  selling_unit_raw:
+    type: string
+    required: false
+    purpose: Raw retailer selling unit such as Cái, Gói, Chai, Lon, Hộp.
+  selling_unit_normalized:
+    type: string
+    required: false
+    purpose: Normalized selling unit such as each, pack, bottle, can, box, roll, set.
+  selling_unit_count:
+    type: decimal(18,4)
+    required: false
+    purpose: Number of selling units in one pack/listing when parsed.
+  measurement_type:
+    type: string
+    required: false
+    allowed_values:
+      - mass
+      - volume
+      - count
+      - area
+      - unknown
+    purpose: Business comparison type.
+  measurement_quantity:
+    type: decimal(18,4)
+    required: false
+    purpose: Parsed quantity before base conversion, for example 3.1 or 330.
+  measurement_unit:
+    type: string
+    required: false
+    purpose: Parsed unit before base conversion, for example kg, g, ml, l, each, cm2.
+  measurement_base_quantity:
+    type: decimal(18,4)
+    required: false
+    purpose: Quantity converted to base unit.
+  measurement_base_unit:
+    type: string
+    required: false
+    purpose: Base unit for comparison, for example g, ml, each, cm2.
+  package_total_base_quantity:
+    type: decimal(18,4)
+    required: false
+    purpose: selling_unit_count * measurement_base_quantity.
+  package_parse_source:
+    type: string
+    required: false
+    purpose: Field used to parse package, for example package_size_raw, product_name_raw, selling_unit_raw.
+  package_parse_confidence:
+    type: string
+    required: true
+    allowed_values:
+      - high
+      - medium
+      - low
+      - none
+    purpose: Confidence level for using package fields in Gold.
+  package_parse_status:
+    type: string
+    required: true
+    allowed_values:
+      - parsed_measurement
+      - parsed_area
+      - selling_unit_fallback
+      - parse_failed
+    purpose: Whether package parser found a usable comparison unit.
+  unit_price_publishable:
+    type: boolean
+    required: true
+    purpose: Whether Gold may calculate unit price from parsed package fields.
+  source_run_id:
+    type: string
+    required: true
+    purpose: Source crawl run id.
+  source_bronze_record_key:
+    type: string
+    required: true
+    purpose: Lineage back to Bronze.
+
+business_rules:
+  - selling_unit tells how retailer sells the product.
+  - measurement unit tells how to compare quantity, volume, mass, count, or area.
+  - Gold may compare two products only when measurement_type and measurement_base_unit are compatible.
+  - unit_price_publishable is false when parse confidence is none or package_total_base_quantity is missing.
+  - source_url and image_url are source attributes; null is allowed when the retailer does not expose them.
+  - source_url must identify a product detail page when one is available, not only a category or promotion page.

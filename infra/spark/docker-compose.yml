@@ -1,0 +1,22 @@
+services:
+  spark-gold:
+    build:
+      context: ../..
+      dockerfile: infra/spark/Dockerfile
+    working_dir: /workspace
+    volumes:
+      - ../..:/workspace
+    environment:
+      PYTHONPATH: /workspace
+    command:
+      - jobs/spark/build_gold_price_snapshot_spark.py
+      - --products-file
+      - warehouse/silver/store=winmart/date=2026-07-02/run_id=20260702_155006/retailer_products.jsonl
+      - --observations-file
+      - warehouse/silver/store=winmart/date=2026-07-02/run_id=20260702_155006/product_observations.jsonl
+      - --out-dir
+      - warehouse_spark_docker
+      - --coalesce
+      - "1"
+      - --compare-gold-file
+      - warehouse/gold/fact_price_snapshot_daily/store=winmart/date=2026-07-02/run_id=20260702_155006/price_snapshot_daily.jsonl

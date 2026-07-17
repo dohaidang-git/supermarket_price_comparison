@@ -1,0 +1,86 @@
+x-airflow-common: &airflow-common
+  build:
+    context: ../..
+    dockerfile: infra/airflow/Dockerfile
+  environment: &airflow-environment
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
+    AIRFLOW__CORE__DEFAULT_TIMEZONE: Asia/Ho_Chi_Minh
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "false"
+    AIRFLOW__WEBSERVER__SECRET_KEY: ${AIRFLOW_WEBSERVER_SECRET_KEY:-change-this-before-production}
+    AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK: "true"
+    PROJECT_ROOT: ${PROJECT_ROOT}
+    PYTHONPATH: ${PROJECT_ROOT}
+  # Airflow needs a real passwd entry. The image's built-in airflow user is UID 50000.
+  user: "50000:0"
+  group_add:
+    - "${DOCKER_GID}"
+  volumes:
+    - ./dags:/opt/airflow/dags:ro
+    - ${PROJECT_ROOT}:${PROJECT_ROOT}
+    - airflow-logs:/opt/airflow/logs
+    - /var/run/docker.sock:/var/run/docker.sock
+  working_dir: ${PROJECT_ROOT}
+  depends_on:
+    postgres:
+      condition: service_healthy
+
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U airflow -d airflow"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  airflow-permissions:
+    image: alpine:3.20
+    user: "0:0"
+    volumes:
+      - airflow-logs:/opt/airflow/logs
+    command: ["/bin/sh", "-c", "chown -R 50000:0 /opt/airflow/logs"]
+    restart: "no"
+
+  airflow-init:
+    <<: *airflow-common
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - |
+        airflow db migrate
+        airflow users create \
+          --username "$${AIRFLOW_ADMIN_USERNAME:-admin}" \
+          --password "$${AIRFLOW_ADMIN_PASSWORD:-admin}" \
+          --firstname Data \
+          --lastname Admin \
+          --role Admin \
+          --email "$${AIRFLOW_ADMIN_EMAIL:-admin@example.local}" || true
+    restart: "no"
+
+  airflow-webserver:
+    <<: *airflow-common
+    command: webserver
+    ports:
+      - "${AIRFLOW_WEBSERVER_PORT:-8088}:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  airflow-scheduler:
+    <<: *airflow-common
+    command: scheduler
+
+volumes:
+  postgres-db-volume:
+  airflow-logs:

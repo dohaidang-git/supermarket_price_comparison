@@ -1,0 +1,114 @@
+contract_name: silver_product_observation
+contract_version: 1
+layer: silver
+table_name: silver.product_observations
+description: >
+  Normalized price and promotion observation for one retailer product at one
+  store and observed timestamp.
+
+grain: "1 row = 1 retailer product at 1 store at 1 observed_at"
+
+record_key:
+  field: observation_id
+  strategy: sha256(retailer_product_id + store_code + observed_at + source_bronze_record_key)
+
+required_fields:
+  - observation_id
+  - retailer_product_id
+  - retailer_id
+  - store_code
+  - observed_at
+  - current_price
+  - currency
+  - source_bronze_record_key
+  - data_quality_status
+
+fields:
+  observation_id:
+    type: string
+    required: true
+    purpose: Stable observation key.
+  retailer_product_id:
+    type: string
+    required: true
+    purpose: FK to silver.retailer_products.
+  retailer_id:
+    type: string
+    required: true
+    purpose: Retailer/source identifier.
+  store_code:
+    type: string
+    required: true
+    purpose: Retailer store code.
+  store_group_code:
+    type: string
+    required: false
+    purpose: Retailer store group when present.
+  observed_at:
+    type: timestamp_string
+    required: true
+    purpose: Source observation timestamp.
+  observation_date:
+    type: date_string
+    required: true
+    purpose: Date partition derived from observed_at.
+  listed_price:
+    type: decimal(18,2)
+    required: false
+    purpose: Original listed price.
+  promo_price:
+    type: decimal(18,2)
+    required: false
+    purpose: Direct promotional price when present.
+  current_price:
+    type: decimal(18,2)
+    required: true
+    purpose: Price paid for one selling unit at observed_at.
+  currency:
+    type: string
+    required: true
+    purpose: Currency code, VND in current MVP.
+  discount_amount:
+    type: decimal(18,2)
+    required: false
+    purpose: listed_price - current_price when valid.
+  discount_percent:
+    type: decimal(7,4)
+    required: false
+    purpose: discount_amount / listed_price * 100 when valid.
+  stock_quantity:
+    type: decimal(18,4)
+    required: false
+    purpose: Source stock/quantity indicator when available.
+  availability_status:
+    type: string
+    required: true
+    allowed_values:
+      - in_stock
+      - out_of_stock
+      - unknown
+    purpose: Normalized availability.
+  is_price_discount:
+    type: boolean
+    required: true
+    purpose: Direct price discount signal.
+  has_promo_mechanic:
+    type: boolean
+    required: true
+    purpose: Bundle/buy-x-get-y/combo signal.
+  is_on_promotion:
+    type: boolean
+    required: true
+    purpose: OR of price discount and promo mechanic.
+  source_url:
+    type: string
+    required: false
+    purpose: Source URL/API endpoint.
+  source_bronze_record_key:
+    type: string
+    required: true
+    purpose: Lineage back to Bronze.
+  data_quality_status:
+    type: string
+    required: true
+    purpose: valid/warning derived from Bronze quality status and Silver parser status.

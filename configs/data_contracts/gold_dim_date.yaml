@@ -1,0 +1,17 @@
+contract_name: gold_dim_date
+contract_version: 1
+layer: gold
+table_name: gold.dim_date
+grain: "1 row = 1 calendar date"
+record_key:
+  field: date_key
+  strategy: YYYYMMDD(calendar_date)
+required_fields: [date_key, calendar_date, year, month, day, day_of_week, is_weekend]
+fields:
+  date_key: {type: int, required: true, purpose: YYYYMMDD surrogate key.}
+  calendar_date: {type: date_string, required: true, purpose: Calendar date.}
+  year: {type: int, required: true, purpose: Calendar year.}
+  month: {type: int, required: true, purpose: Calendar month.}
+  day: {type: int, required: true, purpose: Day of month.}
+  day_of_week: {type: int, required: true, purpose: ISO weekday, Monday equals 1.}
+  is_weekend: {type: boolean, required: true, purpose: Saturday or Sunday flag.}

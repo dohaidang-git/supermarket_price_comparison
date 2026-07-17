@@ -1,0 +1,21 @@
+contract_name: gold_dim_product
+contract_version: 1
+layer: gold
+table_name: gold.dim_product
+grain: "1 row = 1 approved canonical product"
+record_key:
+  field: product_key
+  strategy: sha256(canonical_product_id)
+required_fields: [product_key, canonical_product_id, canonical_name, source_run_id]
+fields:
+  product_key: {type: string, required: true, purpose: Gold canonical product key.}
+  canonical_product_id: {type: string, required: true, purpose: Cross-retailer identity key.}
+  canonical_name: {type: string, required: true, purpose: Chosen display name from an approved listing.}
+  brand: {type: string, required: false, purpose: Canonical brand when available.}
+  product_type: {type: string, required: false, purpose: Normalized product type when available.}
+  measurement_type: {type: string, required: false, purpose: Comparison type.}
+  package_total_base_quantity: {type: decimal(18,4), required: false, purpose: Canonical package quantity.}
+  measurement_base_unit: {type: string, required: false, purpose: Canonical base unit.}
+  canonical_image_url: {type: string, required: false, purpose: Representative image URL.}
+  source_run_id: {type: string, required: true, purpose: Lineage.}
+  built_at: {type: timestamp_string, required: true, purpose: Gold build timestamp.}

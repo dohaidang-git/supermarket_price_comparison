@@ -1,0 +1,16 @@
+contract_name: gold_dim_retailer
+contract_version: 1
+layer: gold
+table_name: gold.dim_retailer
+grain: "1 row = 1 retailer"
+record_key:
+  field: retailer_key
+  strategy: sha256(retailer_id)
+required_fields: [retailer_key, retailer_id, retailer_name, is_active, source_run_id]
+fields:
+  retailer_key: {type: string, required: true, purpose: Stable Gold dimension key.}
+  retailer_id: {type: string, required: true, purpose: Source retailer identifier.}
+  retailer_name: {type: string, required: true, purpose: Display retailer name.}
+  is_active: {type: boolean, required: true, purpose: Whether the retailer appears in the source run.}
+  source_run_id: {type: string, required: true, purpose: Lineage to the source run.}
+  built_at: {type: timestamp_string, required: true, purpose: Gold build timestamp.}

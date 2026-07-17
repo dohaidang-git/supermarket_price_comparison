@@ -1,0 +1,46 @@
+rule_set_name: gold_price_snapshot_rules
+rule_set_version: 1
+layer: gold
+target_table: gold.fact_price_snapshot_daily
+description: >
+  Validation rules for daily price snapshot Gold output.
+
+block_publish:
+  - rule_id: duplicate_snapshot_grain
+    severity: BLOCK_PUBLISH
+    description: More than one row for snapshot_date + retailer_id + store_code + retailer_product_id.
+  - rule_id: missing_current_price
+    severity: BLOCK_PUBLISH
+    description: current_price is required for Gold price snapshot.
+  - rule_id: non_positive_current_price
+    severity: BLOCK_PUBLISH
+    description: current_price must be greater than 0.
+  - rule_id: missing_lineage
+    severity: BLOCK_PUBLISH
+    description: source_run_id, observation_id, or source_bronze_record_key is missing.
+  - rule_id: date_key_mismatch
+    severity: BLOCK_PUBLISH
+    description: date_key must match snapshot_date in YYYYMMDD format.
+  - rule_id: invalid_unit_price_formula
+    severity: BLOCK_PUBLISH
+    description: effective_unit_price must equal current_price / package_total_base_quantity within tolerance.
+
+warn:
+  - rule_id: unit_price_not_publishable
+    severity: WARN
+    description: Product can publish total price but not unit price.
+  - rule_id: missing_listed_price
+    severity: WARN
+    description: Current price exists but listed price is missing.
+  - rule_id: unknown_availability
+    severity: WARN
+    description: Availability is unknown.
+  - rule_id: upstream_quality_warning
+    severity: WARN
+    description: Selected Silver observation has warning quality status.
+
+acceptance:
+  - duplicate_snapshot_grain count must be 0.
+  - block_publish issue count must be 0 before business app uses the table.
+  - unit_price_not_publishable rows may remain, but effective_unit_price must be null for them.
+  - Every row must trace back to a Silver observation and Bronze record.

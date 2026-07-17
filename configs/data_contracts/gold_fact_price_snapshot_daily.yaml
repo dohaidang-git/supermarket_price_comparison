@@ -1,0 +1,170 @@
+contract_name: gold_fact_price_snapshot_daily
+contract_version: 1
+layer: gold
+table_name: gold.fact_price_snapshot_daily
+description: >
+  Daily business-ready price snapshot. One row is the latest valid observed
+  price for one retailer product at one store on one date.
+
+grain: "1 row = latest valid price of 1 retailer_product_id at 1 store_code on 1 snapshot_date"
+
+record_key:
+  field: price_snapshot_id
+  strategy: sha256(snapshot_date + retailer_id + store_code + retailer_product_id)
+
+required_fields:
+  - price_snapshot_id
+  - date_key
+  - snapshot_date
+  - retailer_key
+  - store_key
+  - retailer_product_key
+  - retailer_id
+  - store_code
+  - retailer_product_id
+  - observation_id
+  - current_price
+  - currency
+  - is_on_promotion
+  - observed_at
+  - run_status
+  - source_run_id
+  - source_bronze_record_key
+
+fields:
+  price_snapshot_id:
+    type: string
+    required: true
+    purpose: Stable daily snapshot key.
+  date_key:
+    type: int
+    required: true
+    purpose: YYYYMMDD derived from snapshot_date.
+  snapshot_date:
+    type: date_string
+    required: true
+    purpose: Business date of the snapshot.
+  retailer_key:
+    type: string
+    required: true
+    purpose: FK to gold.dim_retailer.
+  store_key:
+    type: string
+    required: true
+    purpose: FK to gold.dim_store.
+  retailer_product_key:
+    type: string
+    required: true
+    purpose: FK to gold.dim_retailer_product.
+  product_key:
+    type: string
+    required: false
+    purpose: FK to gold.dim_product only when an approved canonical mapping exists.
+  canonical_product_id:
+    type: string
+    required: false
+    purpose: Approved cross-retailer product identity used to resolve product_key.
+  retailer_id:
+    type: string
+    required: true
+    purpose: Retailer/source identifier.
+  store_code:
+    type: string
+    required: true
+    purpose: Retailer store code.
+  store_group_code:
+    type: string
+    required: false
+    purpose: Retailer store group when present.
+  retailer_product_id:
+    type: string
+    required: true
+    purpose: FK to silver.retailer_products.
+  observation_id:
+    type: string
+    required: true
+    purpose: Selected silver.product_observations row.
+  product_name:
+    type: string
+    required: false
+    purpose: Denormalized product name for local MVP inspection.
+  brand:
+    type: string
+    required: false
+    purpose: Denormalized brand for local MVP inspection.
+  category_raw:
+    type: string
+    required: false
+    purpose: Denormalized source category for local MVP inspection.
+  listed_price:
+    type: decimal(18,2)
+    required: false
+    purpose: Listed price.
+  promo_price:
+    type: decimal(18,2)
+    required: false
+    purpose: Direct promo price.
+  current_price:
+    type: decimal(18,2)
+    required: true
+    purpose: Current selling price for one selling unit.
+  currency:
+    type: string
+    required: true
+    purpose: Currency code.
+  effective_unit_price:
+    type: decimal(18,6)
+    required: false
+    purpose: current_price / package_total_base_quantity when publishable.
+  comparison_unit:
+    type: string
+    required: false
+    purpose: Base unit used for effective_unit_price, for example g, ml, each, cm2.
+  measurement_type:
+    type: string
+    required: false
+    purpose: mass, volume, count, area, or unknown.
+  unit_price_publishable:
+    type: boolean
+    required: true
+    purpose: Whether effective_unit_price is allowed to be published.
+  discount_amount:
+    type: decimal(18,2)
+    required: false
+    purpose: listed_price - current_price when valid.
+  discount_percent:
+    type: decimal(7,4)
+    required: false
+    purpose: discount_amount / listed_price * 100 when valid.
+  availability_status:
+    type: string
+    required: false
+    purpose: in_stock, out_of_stock, unknown.
+  is_on_promotion:
+    type: boolean
+    required: true
+    purpose: Product is under direct price discount or promo mechanic.
+  observed_at:
+    type: timestamp_string
+    required: true
+    purpose: Timestamp of selected observation.
+  run_status:
+    type: string
+    required: true
+    purpose: Status of upstream Silver/Gold build.
+  source_run_id:
+    type: string
+    required: true
+    purpose: Source crawl run id.
+  source_bronze_record_key:
+    type: string
+    required: true
+    purpose: Lineage back to Bronze/raw.
+
+business_rules:
+  - Use only latest valid observation per retailer_product_id, store_code, snapshot_date.
+  - retailer_key, store_key, and retailer_product_key must use the deterministic key strategy of their dimensions.
+  - product_key is null until the retailer product has an approved canonical mapping; unmatched products must not be inferred as a canonical product.
+  - Publish current_price even when unit_price_publishable is false.
+  - Publish effective_unit_price only when unit_price_publishable is true and package_total_base_quantity > 0.
+  - Do not compare products by unit price when comparison_unit or measurement_type differs.

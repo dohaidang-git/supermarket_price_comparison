@@ -1,0 +1,16 @@
+name: silver_category_mapping
+version: 1
+grain: one normalized retailer category candidate
+record_key: category_mapping_id
+fields:
+  category_mapping_id: {type: string, required: true}
+  retailer_id: {type: string, required: true}
+  category_raw: {type: string, required: true}
+  category_path_raw: {type: json, required: false}
+  category_normalized: {type: string, required: true}
+  canonical_category_id: {type: string, required: false}
+  mapping_status: {type: string, required: true}
+  mapping_method: {type: string, required: true}
+  source_run_id: {type: string, required: true}
+  source_bronze_record_key: {type: string, required: true}
+  built_at: {type: timestamp, required: true}

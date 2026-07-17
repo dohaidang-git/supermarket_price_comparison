@@ -1,0 +1,14 @@
+name: gold_dim_promotion
+version: 1
+grain: one observed product-level promotion offer
+record_key: promotion_key
+fields:
+  promotion_key: {type: string, required: true}
+  promotion_id: {type: string, required: true}
+  retailer_id: {type: string, required: true}
+  store_code: {type: string, required: true}
+  promotion_scope: {type: string, required: true}
+  promotion_type: {type: string, required: true}
+  observation_date: {type: date, required: false}
+  source_run_id: {type: string, required: true}
+  built_at: {type: timestamp, required: true}

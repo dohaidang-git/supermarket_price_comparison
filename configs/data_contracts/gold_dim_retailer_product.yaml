@@ -1,0 +1,20 @@
+contract_name: gold_dim_retailer_product
+contract_version: 1
+layer: gold
+table_name: gold.dim_retailer_product
+grain: "1 row = 1 retailer product listing"
+record_key:
+  field: retailer_product_key
+  strategy: sha256(retailer_id + retailer_product_id)
+required_fields: [retailer_product_key, retailer_product_id, retailer_id, product_name, source_run_id]
+fields:
+  retailer_product_key: {type: string, required: true, purpose: Gold listing key.}
+  retailer_product_id: {type: string, required: true, purpose: Silver listing business key.}
+  canonical_product_id: {type: string, required: false, purpose: Approved cross-retailer product identity.}
+  retailer_id: {type: string, required: true, purpose: Owning retailer.}
+  product_name: {type: string, required: true, purpose: Retailer display name.}
+  barcode: {type: string, required: false, purpose: Valid source barcode when available.}
+  source_url: {type: string, required: false, purpose: Product detail URL.}
+  image_url: {type: string, required: false, purpose: Primary product image URL.}
+  source_run_id: {type: string, required: true, purpose: Lineage.}
+  built_at: {type: timestamp_string, required: true, purpose: Gold build timestamp.}

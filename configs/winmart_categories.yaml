@@ -1,0 +1,773 @@
+# WinMart category crawl config
+# Generated from captured WinMart category API: /mt/api/web/v1/category
+# Store profile is intentionally fixed for MVP crawl consistency.
+
+retailer_id: "winmart"
+retailer_name: "WinMart"
+
+crawl_profile:
+  name: "binh_dinh_default"
+  region: "Binh Dinh"
+  store_code: "1682"
+  store_group_code: "1998"
+  branch_name: null
+  address_context: "Default Binh Dinh WinMart store for MVP crawl; storeCode provided manually."
+
+crawl_options:
+  order: "km"
+  page_size: 8
+  max_pages_per_category: 50
+  stop_after_no_discount_pages: 3
+  collect_all_products: false
+  stop_on_no_discount_pages: true
+  only_discounted_products: true
+  hydrate_unmatched_promo_cards: true
+  hydrate_detail_pages: true
+  max_hydrate_items: 50
+  dedupe_keys:
+    - "barcode"
+    - "sku"
+    - "itemNo"
+    - "id"
+
+api_templates:
+  category_items: "https://api-crownx.winmart.vn/it/api/web/v3/item/category?orderBy=km&orderByDesc=true&pageNumber={page_number}&pageSize={page_size}&slug={slug}&storeCode={store_code}"
+  category_tree: "https://api-crownx.winmart.vn/mt/api/web/v1/category"
+
+categories:
+  - code: "MENU114"
+    name: "Giá Siêu Rẻ"
+    slug: "gia-sieu-re--c114"
+    level: 1
+    parent_code: null
+    priority: 2
+    enabled: true
+    source_url: "https://winmart.vn/gia-sieu-re--c114?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU51"
+    name: "Ưu Đãi Hội Viên"
+    slug: "uu-dai-hoi-vien--c51"
+    level: 1
+    parent_code: null
+    priority: 5
+    enabled: true
+    source_url: "https://winmart.vn/uu-dai-hoi-vien--c51?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU08"
+    name: "Sữa các loại"
+    slug: "sua-cac-loai--c08"
+    level: 1
+    parent_code: null
+    priority: 6
+    enabled: true
+    source_url: "https://winmart.vn/sua-cac-loai--c08?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0133"
+    name: "Sữa Tươi"
+    slug: "sua-tuoi--c0133"
+    level: 2
+    parent_code: "MENU08"
+    priority: 1
+    enabled: false
+    source_url: "https://winmart.vn/sua-tuoi--c0133?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0134"
+    name: "Sữa Hạt - Sữa Đậu"
+    slug: "sua-hat-sua-dau--c0134"
+    level: 2
+    parent_code: "MENU08"
+    priority: 2
+    enabled: false
+    source_url: "https://winmart.vn/sua-hat-sua-dau--c0134?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0135"
+    name: "Sữa Bột"
+    slug: "sua-bot--c0135"
+    level: 2
+    parent_code: "MENU08"
+    priority: 3
+    enabled: false
+    source_url: "https://winmart.vn/sua-bot--c0135?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0138"
+    name: "Bơ Sữa - Phô Mai"
+    slug: "bo-sua-pho-mai--c0138"
+    level: 2
+    parent_code: "MENU08"
+    priority: 6
+    enabled: false
+    source_url: "https://winmart.vn/bo-sua-pho-mai--c0138?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01161"
+    name: "Sữa đặc"
+    slug: "sua-dac--c01161"
+    level: 2
+    parent_code: "MENU08"
+    priority: 7
+    enabled: false
+    source_url: "https://winmart.vn/sua-dac--c01161?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01169"
+    name: "Sữa Chua - Váng Sữa"
+    slug: "sua-chua-vang-sua--c01169"
+    level: 2
+    parent_code: "MENU08"
+    priority: 8
+    enabled: false
+    source_url: "https://winmart.vn/sua-chua-vang-sua--c01169?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU02"
+    name: "Rau - Củ - Trái Cây"
+    slug: "rau-cu-trai-cay--c02"
+    level: 1
+    parent_code: null
+    priority: 7
+    enabled: true
+    source_url: "https://winmart.vn/rau-cu-trai-cay--c02?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01167"
+    name: "Rau Lá"
+    slug: "rau-la--c01167"
+    level: 2
+    parent_code: "MENU02"
+    priority: 3
+    enabled: false
+    source_url: "https://winmart.vn/rau-la--c01167?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01168"
+    name: "Củ, Quả"
+    slug: "cu-qua--c01168"
+    level: 2
+    parent_code: "MENU02"
+    priority: 4
+    enabled: false
+    source_url: "https://winmart.vn/cu-qua--c01168?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01173"
+    name: "Trái cây tươi"
+    slug: "trai-cay-tuoi--c01173"
+    level: 2
+    parent_code: "MENU02"
+    priority: 5
+    enabled: false
+    source_url: "https://winmart.vn/trai-cay-tuoi--c01173?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU10"
+    name: "Hóa Phẩm - Tẩy rửa"
+    slug: "hoa-pham-tay-rua--c10"
+    level: 1
+    parent_code: null
+    priority: 8
+    enabled: true
+    source_url: "https://winmart.vn/hoa-pham-tay-rua--c10?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01140"
+    name: "Nước Giặt"
+    slug: "nuoc-giat--c01140"
+    level: 2
+    parent_code: "MENU10"
+    priority: 1
+    enabled: false
+    source_url: "https://winmart.vn/nuoc-giat--c01140?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01144"
+    name: "Nước Xả"
+    slug: "nuoc-xa--c01144"
+    level: 2
+    parent_code: "MENU10"
+    priority: 2
+    enabled: false
+    source_url: "https://winmart.vn/nuoc-xa--c01144?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01142"
+    name: "Nước Rửa Chén"
+    slug: "nuoc-rua-chen--c01142"
+    level: 2
+    parent_code: "MENU10"
+    priority: 3
+    enabled: false
+    source_url: "https://winmart.vn/nuoc-rua-chen--c01142?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01139"
+    name: "Bình Xịt Côn Trùng"
+    slug: "binh-xit-con-trung--c01139"
+    level: 2
+    parent_code: "MENU10"
+    priority: 4
+    enabled: false
+    source_url: "https://winmart.vn/binh-xit-con-trung--c01139?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01141"
+    name: "Nước Lau Sàn - Lau Kính"
+    slug: "nuoc-lau-san-lau-kinh--c01141"
+    level: 2
+    parent_code: "MENU10"
+    priority: 6
+    enabled: false
+    source_url: "https://winmart.vn/nuoc-lau-san-lau-kinh--c01141?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01143"
+    name: "Nước Tẩy Rửa"
+    slug: "nuoc-tay-rua--c01143"
+    level: 2
+    parent_code: "MENU10"
+    priority: 8
+    enabled: false
+    source_url: "https://winmart.vn/nuoc-tay-rua--c01143?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU11"
+    name: "Chăm Sóc Cá Nhân"
+    slug: "cham-soc-ca-nhan--c11"
+    level: 1
+    parent_code: null
+    priority: 9
+    enabled: true
+    source_url: "https://winmart.vn/cham-soc-ca-nhan--c11?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0147"
+    name: "Chăm Sóc Răng Miệng"
+    slug: "cham-soc-rang-mieng--c0147"
+    level: 2
+    parent_code: "MENU11"
+    priority: 1
+    enabled: false
+    source_url: "https://winmart.vn/cham-soc-rang-mieng--c0147?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0146"
+    name: "Chăm Sóc Da"
+    slug: "cham-soc-da--c0146"
+    level: 2
+    parent_code: "MENU11"
+    priority: 2
+    enabled: false
+    source_url: "https://winmart.vn/cham-soc-da--c0146?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0145"
+    name: "Chăm Sóc Tóc"
+    slug: "cham-soc-toc--c0145"
+    level: 2
+    parent_code: "MENU11"
+    priority: 3
+    enabled: false
+    source_url: "https://winmart.vn/cham-soc-toc--c0145?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0148"
+    name: "Chăm Sóc Phụ Nữ"
+    slug: "cham-soc-phu-nu--c0148"
+    level: 2
+    parent_code: "MENU11"
+    priority: 4
+    enabled: false
+    source_url: "https://winmart.vn/cham-soc-phu-nu--c0148?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0149"
+    name: "Chăm Sóc Cá Nhân Khác"
+    slug: "cham-soc-ca-nhan-khac--c0149"
+    level: 2
+    parent_code: "MENU11"
+    priority: 5
+    enabled: false
+    source_url: "https://winmart.vn/cham-soc-ca-nhan-khac--c0149?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0150"
+    name: "Mỹ Phẩm"
+    slug: "my-pham--c0150"
+    level: 2
+    parent_code: "MENU11"
+    priority: 6
+    enabled: false
+    source_url: "https://winmart.vn/my-pham--c0150?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0151"
+    name: "Khăn Giấy - Khăn Ướt"
+    slug: "khan-giay-khan-uot--c0151"
+    level: 2
+    parent_code: "MENU11"
+    priority: 7
+    enabled: false
+    source_url: "https://winmart.vn/khan-giay-khan-uot--c0151?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU03"
+    name: "Thịt - Hải Sản Tươi"
+    slug: "thit-hai-san-tuoi--c03"
+    level: 1
+    parent_code: null
+    priority: 10
+    enabled: true
+    source_url: "https://winmart.vn/thit-hai-san-tuoi--c03?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0111"
+    name: "Thịt"
+    slug: "thit--c0111"
+    level: 2
+    parent_code: "MENU03"
+    priority: 1
+    enabled: false
+    source_url: "https://winmart.vn/thit--c0111?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0113"
+    name: "Hải Sản"
+    slug: "hai-san--c0113"
+    level: 2
+    parent_code: "MENU03"
+    priority: 3
+    enabled: false
+    source_url: "https://winmart.vn/hai-san--c0113?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU07"
+    name: "Bánh Kẹo"
+    slug: "banh-keo--c07"
+    level: 1
+    parent_code: null
+    priority: 11
+    enabled: true
+    source_url: "https://winmart.vn/banh-keo--c07?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0127"
+    name: "Bánh Xốp - Bánh Quy"
+    slug: "banh-xop-banh-quy--c0127"
+    level: 2
+    parent_code: "MENU07"
+    priority: 1
+    enabled: false
+    source_url: "https://winmart.vn/banh-xop-banh-quy--c0127?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0128"
+    name: "Kẹo - Chocolate"
+    slug: "keo-chocolate--c0128"
+    level: 2
+    parent_code: "MENU07"
+    priority: 2
+    enabled: false
+    source_url: "https://winmart.vn/keo-chocolate--c0128?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0129"
+    name: "Bánh Snack"
+    slug: "banh-snack--c0129"
+    level: 2
+    parent_code: "MENU07"
+    priority: 3
+    enabled: false
+    source_url: "https://winmart.vn/banh-snack--c0129?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0130"
+    name: "Hạt - Trái Cây Sấy Khô"
+    slug: "hat-trai-cay-say-kho--c0130"
+    level: 2
+    parent_code: "MENU07"
+    priority: 4
+    enabled: false
+    source_url: "https://winmart.vn/hat-trai-cay-say-kho--c0130?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU31"
+    name: "Đồ uống có cồn"
+    slug: "do-uong-co-con--c31"
+    level: 1
+    parent_code: null
+    priority: 12
+    enabled: true
+    source_url: "https://winmart.vn/do-uong-co-con--c31?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01135"
+    name: "Bia"
+    slug: "bia--c01135"
+    level: 2
+    parent_code: "MENU31"
+    priority: 1
+    enabled: false
+    source_url: "https://winmart.vn/bia--c01135?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU09"
+    name: "Đồ Uống - Giải Khát"
+    slug: "do-uong-giai-khat--c09"
+    level: 1
+    parent_code: null
+    priority: 13
+    enabled: true
+    source_url: "https://winmart.vn/do-uong-giai-khat--c09?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01162"
+    name: "Cà Phê"
+    slug: "ca-phe--c01162"
+    level: 2
+    parent_code: "MENU09"
+    priority: 4
+    enabled: false
+    source_url: "https://winmart.vn/ca-phe--c01162?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01163"
+    name: "Nước Suối"
+    slug: "nuoc-suoi--c01163"
+    level: 2
+    parent_code: "MENU09"
+    priority: 5
+    enabled: false
+    source_url: "https://winmart.vn/nuoc-suoi--c01163?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01164"
+    name: "Nước Ngọt"
+    slug: "nuoc-ngot--c01164"
+    level: 2
+    parent_code: "MENU09"
+    priority: 6
+    enabled: false
+    source_url: "https://winmart.vn/nuoc-ngot--c01164?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0141"
+    name: "Trà - Các Loại Khác"
+    slug: "tra-cac-loai-khac--c0141"
+    level: 2
+    parent_code: "MENU09"
+    priority: 7
+    enabled: false
+    source_url: "https://winmart.vn/tra-cac-loai-khac--c0141?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU34"
+    name: "Mì - Thực Phẩm Ăn Liền"
+    slug: "mi-thuc-pham-an-lien--c34"
+    level: 1
+    parent_code: null
+    priority: 14
+    enabled: true
+    source_url: "https://winmart.vn/mi-thuc-pham-an-lien--c34?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01145"
+    name: "Mì"
+    slug: "mi--c01145"
+    level: 2
+    parent_code: "MENU34"
+    priority: 1
+    enabled: false
+    source_url: "https://winmart.vn/mi--c01145?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01148"
+    name: "Miến - Hủ Tíu - Bánh Canh"
+    slug: "mien-hu-tiu-banh-canh--c01148"
+    level: 2
+    parent_code: "MENU34"
+    priority: 2
+    enabled: false
+    source_url: "https://winmart.vn/mien-hu-tiu-banh-canh--c01148?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01146"
+    name: "Cháo"
+    slug: "chao--c01146"
+    level: 2
+    parent_code: "MENU34"
+    priority: 3
+    enabled: false
+    source_url: "https://winmart.vn/chao--c01146?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01147"
+    name: "Phở - Bún"
+    slug: "pho-bun--c01147"
+    level: 2
+    parent_code: "MENU34"
+    priority: 4
+    enabled: false
+    source_url: "https://winmart.vn/pho-bun--c01147?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU06"
+    name: "Thực Phẩm Khô"
+    slug: "thuc-pham-kho--c06"
+    level: 1
+    parent_code: null
+    priority: 15
+    enabled: true
+    source_url: "https://winmart.vn/thuc-pham-kho--c06?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0120"
+    name: "Gạo - Nông Sản Khô"
+    slug: "gao-nong-san-kho--c0120"
+    level: 2
+    parent_code: "MENU06"
+    priority: 2
+    enabled: false
+    source_url: "https://winmart.vn/gao-nong-san-kho--c0120?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0122"
+    name: "Ngũ Cốc - Yến Mạch"
+    slug: "ngu-coc-yen-mach--c0122"
+    level: 2
+    parent_code: "MENU06"
+    priority: 4
+    enabled: false
+    source_url: "https://winmart.vn/ngu-coc-yen-mach--c0122?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0123"
+    name: "Thực Phẩm Đóng Hộp"
+    slug: "thuc-pham-dong-hop--c0123"
+    level: 2
+    parent_code: "MENU06"
+    priority: 5
+    enabled: false
+    source_url: "https://winmart.vn/thuc-pham-dong-hop--c0123?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0124"
+    name: "Rong Biển - Tảo Biển"
+    slug: "rong-bien-tao-bien--c0124"
+    level: 2
+    parent_code: "MENU06"
+    priority: 6
+    enabled: false
+    source_url: "https://winmart.vn/rong-bien-tao-bien--c0124?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0125"
+    name: "Bột Các Loại"
+    slug: "bot-cac-loai--c0125"
+    level: 2
+    parent_code: "MENU06"
+    priority: 7
+    enabled: false
+    source_url: "https://winmart.vn/bot-cac-loai--c0125?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01166"
+    name: "Thực Phẩm Chay"
+    slug: "thuc-pham-chay--c01166"
+    level: 2
+    parent_code: "MENU06"
+    priority: 9
+    enabled: false
+    source_url: "https://winmart.vn/thuc-pham-chay--c01166?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU04"
+    name: "Thực Phẩm Chế Biến"
+    slug: "thuc-pham-che-bien--c04"
+    level: 1
+    parent_code: null
+    priority: 16
+    enabled: true
+    source_url: "https://winmart.vn/thuc-pham-che-bien--c04?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0115"
+    name: "Bánh mì"
+    slug: "banh-mi--c0115"
+    level: 2
+    parent_code: "MENU04"
+    priority: 1
+    enabled: false
+    source_url: "https://winmart.vn/banh-mi--c0115?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0156"
+    name: "Xúc xích - Thịt Nguội"
+    slug: "xuc-xich-thit-nguoi--c0156"
+    level: 2
+    parent_code: "MENU04"
+    priority: 2
+    enabled: false
+    source_url: "https://winmart.vn/xuc-xich-thit-nguoi--c0156?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01156"
+    name: "Bánh bao"
+    slug: "banh-bao--c01156"
+    level: 2
+    parent_code: "MENU04"
+    priority: 3
+    enabled: false
+    source_url: "https://winmart.vn/banh-bao--c01156?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01157"
+    name: "Kim chi"
+    slug: "kim-chi--c01157"
+    level: 2
+    parent_code: "MENU04"
+    priority: 4
+    enabled: false
+    source_url: "https://winmart.vn/kim-chi--c01157?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0114"
+    name: "Thực Phẩm Chế Biến Khác"
+    slug: "thuc-pham-che-bien-khac--c0114"
+    level: 2
+    parent_code: "MENU04"
+    priority: 5
+    enabled: false
+    source_url: "https://winmart.vn/thuc-pham-che-bien-khac--c0114?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU35"
+    name: "Gia vị"
+    slug: "gia-vi--c35"
+    level: 1
+    parent_code: null
+    priority: 17
+    enabled: true
+    source_url: "https://winmart.vn/gia-vi--c35?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01149"
+    name: "Dầu Ăn"
+    slug: "dau-an--c01149"
+    level: 2
+    parent_code: "MENU35"
+    priority: 1
+    enabled: false
+    source_url: "https://winmart.vn/dau-an--c01149?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01150"
+    name: "Nước Mắm - Nước Chấm"
+    slug: "nuoc-mam-nuoc-cham--c01150"
+    level: 2
+    parent_code: "MENU35"
+    priority: 2
+    enabled: false
+    source_url: "https://winmart.vn/nuoc-mam-nuoc-cham--c01150?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01151"
+    name: "Đường"
+    slug: "duong--c01151"
+    level: 2
+    parent_code: "MENU35"
+    priority: 3
+    enabled: false
+    source_url: "https://winmart.vn/duong--c01151?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01152"
+    name: "Nước Tương"
+    slug: "nuoc-tuong--c01152"
+    level: 2
+    parent_code: "MENU35"
+    priority: 4
+    enabled: false
+    source_url: "https://winmart.vn/nuoc-tuong--c01152?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01153"
+    name: "Hạt Nêm"
+    slug: "hat-nem--c01153"
+    level: 2
+    parent_code: "MENU35"
+    priority: 5
+    enabled: false
+    source_url: "https://winmart.vn/hat-nem--c01153?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01154"
+    name: "Tương Các Loại"
+    slug: "tuong-cac-loai--c01154"
+    level: 2
+    parent_code: "MENU35"
+    priority: 6
+    enabled: false
+    source_url: "https://winmart.vn/tuong-cac-loai--c01154?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01155"
+    name: "Gia Vị Khác"
+    slug: "gia-vi-khac--c01155"
+    level: 2
+    parent_code: "MENU35"
+    priority: 7
+    enabled: false
+    source_url: "https://winmart.vn/gia-vi-khac--c01155?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU05"
+    name: "Thực Phẩm Đông Lạnh"
+    slug: "thuc-pham-dong-lanh--c05"
+    level: 1
+    parent_code: null
+    priority: 18
+    enabled: true
+    source_url: "https://winmart.vn/thuc-pham-dong-lanh--c05?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0157"
+    name: "Hải Sản Đông Lạnh"
+    slug: "hai-san-dong-lanh--c0157"
+    level: 2
+    parent_code: "MENU05"
+    priority: 4
+    enabled: false
+    source_url: "https://winmart.vn/hai-san-dong-lanh--c0157?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01158"
+    name: "Thịt Đông Lạnh"
+    slug: "thit-dong-lanh--c01158"
+    level: 2
+    parent_code: "MENU05"
+    priority: 7
+    enabled: false
+    source_url: "https://winmart.vn/thit-dong-lanh--c01158?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01159"
+    name: "Chả Giò"
+    slug: "cha-gio--c01159"
+    level: 2
+    parent_code: "MENU05"
+    priority: 8
+    enabled: false
+    source_url: "https://winmart.vn/cha-gio--c01159?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01160"
+    name: "Cá - Bò Viên"
+    slug: "ca-bo-vien--c01160"
+    level: 2
+    parent_code: "MENU05"
+    priority: 9
+    enabled: false
+    source_url: "https://winmart.vn/ca-bo-vien--c01160?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0158"
+    name: "Thực Phẩm Đông Lạnh Khác"
+    slug: "thuc-pham-dong-lanh-khac--c0158"
+    level: 2
+    parent_code: "MENU05"
+    priority: 10
+    enabled: false
+    source_url: "https://winmart.vn/thuc-pham-dong-lanh-khac--c0158?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU33"
+    name: "Trứng - Đậu Hũ"
+    slug: "trung-dau-hu--c33"
+    level: 1
+    parent_code: null
+    priority: 19
+    enabled: true
+    source_url: "https://winmart.vn/trung-dau-hu--c33?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01165"
+    name: "Trứng"
+    slug: "trung--c01165"
+    level: 2
+    parent_code: "MENU33"
+    priority: 1
+    enabled: false
+    source_url: "https://winmart.vn/trung--c01165?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01138"
+    name: "Đậu hũ"
+    slug: "dau-hu--c01138"
+    level: 2
+    parent_code: "MENU33"
+    priority: 2
+    enabled: false
+    source_url: "https://winmart.vn/dau-hu--c01138?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU12"
+    name: "Chăm Sóc Bé"
+    slug: "cham-soc-be--c12"
+    level: 1
+    parent_code: null
+    priority: 20
+    enabled: true
+    source_url: "https://winmart.vn/cham-soc-be--c12?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0152"
+    name: "Sữa Bột - Sữa Dinh Dưỡng"
+    slug: "sua-bot-sua-dinh-duong--c0152"
+    level: 2
+    parent_code: "MENU12"
+    priority: 1
+    enabled: false
+    source_url: "https://winmart.vn/sua-bot-sua-dinh-duong--c0152?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0154"
+    name: "Tã - Bỉm"
+    slug: "ta-bim--c0154"
+    level: 2
+    parent_code: "MENU12"
+    priority: 2
+    enabled: false
+    source_url: "https://winmart.vn/ta-bim--c0154?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01137"
+    name: "Sữa Tắm - Gội Cho Bé"
+    slug: "sua-tam-goi-cho-be--c01137"
+    level: 2
+    parent_code: "MENU12"
+    priority: 3
+    enabled: false
+    source_url: "https://winmart.vn/sua-tam-goi-cho-be--c01137?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0155"
+    name: "Chăm Sóc Cá Nhân Cho Bé"
+    slug: "cham-soc-ca-nhan-cho-be--c0155"
+    level: 2
+    parent_code: "MENU12"
+    priority: 4
+    enabled: false
+    source_url: "https://winmart.vn/cham-soc-ca-nhan-cho-be--c0155?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU25"
+    name: "Đồ Dùng Gia Đình"
+    slug: "do-dung-gia-dinh--c25"
+    level: 1
+    parent_code: null
+    priority: 21
+    enabled: true
+    source_url: "https://winmart.vn/do-dung-gia-dinh--c25?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0197"
+    name: "Đồ Dùng Phòng Ngủ"
+    slug: "do-dung-phong-ngu--c0197"
+    level: 2
+    parent_code: "MENU25"
+    priority: 1
+    enabled: false
+    source_url: "https://winmart.vn/do-dung-phong-ngu--c0197?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU0198"
+    name: "Đồ dùng trong nhà"
+    slug: "do-dung-trong-nha--c0198"
+    level: 2
+    parent_code: "MENU25"
+    priority: 2
+    enabled: false
+    source_url: "https://winmart.vn/do-dung-trong-nha--c0198?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01101"
+    name: "Dụng cụ sữa chữa"
+    slug: "dung-cu-sua-chua--c01101"
+    level: 2
+    parent_code: "MENU25"
+    priority: 5
+    enabled: false
+    source_url: "https://winmart.vn/dung-cu-sua-chua--c01101?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01133"
+    name: "Đồ dùng nhà bếp"
+    slug: "do-dung-nha-bep--c01133"
+    level: 2
+    parent_code: "MENU25"
+    priority: 8
+    enabled: false
+    source_url: "https://winmart.vn/do-dung-nha-bep--c01133?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01136"
+    name: "Thiết bị dùng điện trong nhà"
+    slug: "thiet-bi-dung-dien-trong-nha--c01136"
+    level: 2
+    parent_code: "MENU25"
+    priority: 9
+    enabled: false
+    source_url: "https://winmart.vn/thiet-bi-dung-dien-trong-nha--c01136?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU01170"
+    name: "Vệ Sinh Nhà Cửa"
+    slug: "ve-sinh-nha-cua--c01170"
+    level: 2
+    parent_code: "MENU25"
+    priority: 10
+    enabled: false
+    source_url: "https://winmart.vn/ve-sinh-nha-cua--c01170?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU26"
+    name: "Điện Gia Dụng"
+    slug: "dien-gia-dung--c26"
+    level: 1
+    parent_code: null
+    priority: 22
+    enabled: true
+    source_url: "https://winmart.vn/dien-gia-dung--c26?cate2=&brands=&order=km&storeCode=1682"
+  - code: "MENU27"
+    name: "Văn Phòng Phẩm - Đồ Chơi"
+    slug: "van-phong-pham-do-choi--c27"
+    level: 1
+    parent_code: null
+    priority: 62
+    enabled: true
+    source_url: "https://winmart.vn/van-phong-pham-do-choi--c27?cate2=&brands=&order=km&storeCode=1682"

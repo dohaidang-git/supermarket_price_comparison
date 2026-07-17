@@ -1,0 +1,133 @@
+contract_name: bronze_raw_record
+contract_version: 1
+layer: bronze
+table_name: bronze.raw_records
+description: >
+  Generic Bronze envelope for raw JSONL records produced by crawlers.
+  One row represents one raw record from one source file in one crawler run.
+
+grain: "1 row = 1 raw JSONL record from 1 source file in 1 run"
+
+record_key:
+  field: bronze_record_key
+  strategy: >
+    sha256 of stable run/source identity plus raw payload hash and payload occurrence
+    within the source file. source_line_number is kept for lineage but is not part
+    of the primary key because line number can change if a file is sorted.
+  components:
+    - contract_version
+    - retailer_id
+    - run_id
+    - source_dataset
+    - source_file
+    - payload_sha256
+    - payload_occurrence_index
+
+required_fields:
+  - bronze_record_key
+  - contract_version
+  - run_id
+  - retailer_id
+  - source_dataset
+  - source_file
+  - source_line_number
+  - raw_payload
+  - payload_sha256
+  - ingested_at
+
+fields:
+  bronze_record_key:
+    type: string
+    required: true
+    purpose: Deterministic key for idempotent Bronze ingest.
+  contract_version:
+    type: integer
+    required: true
+    purpose: Version of this Bronze envelope contract.
+  run_id:
+    type: string
+    required: true
+    purpose: Crawler run identifier.
+  retailer_id:
+    type: string
+    required: true
+    purpose: Retailer/source identifier, for example winmart.
+  store_code:
+    type: string
+    required: false
+    purpose: Store context used by the crawl.
+  store_group_code:
+    type: string
+    required: false
+    purpose: Retailer store group context when present.
+  region:
+    type: string
+    required: false
+    purpose: Human-readable crawl region.
+  source_dataset:
+    type: string
+    required: true
+    purpose: Logical source file type, for example products, promo_cards, products_enriched.
+  source_file:
+    type: string
+    required: true
+    purpose: Raw JSONL file path relative to workspace.
+  source_line_number:
+    type: integer
+    required: true
+    purpose: 1-based line number in source_file for lineage/debugging.
+  source_url:
+    type: string
+    required: false
+    purpose: URL/API endpoint that produced the raw record when available.
+  observed_at:
+    type: timestamp_string
+    required: false
+    purpose: Time the crawler observed the record on the source.
+  ingested_at:
+    type: timestamp_string
+    required: true
+    purpose: Time the Bronze ingest job wrote this envelope.
+  raw_payload:
+    type: object
+    required: true
+    purpose: Original raw JSON object from JSONL.
+  payload_sha256:
+    type: string
+    required: true
+    purpose: Hash of canonical raw_payload JSON.
+  payload_occurrence_index:
+    type: integer
+    required: true
+    purpose: 1-based occurrence counter for identical payload hash within the same source file.
+  source_file_sha256:
+    type: string
+    required: true
+    purpose: Hash of the full source file content used for manifest and corruption checks.
+  raw_run_dir:
+    type: string
+    required: true
+    purpose: Raw crawler run directory.
+  quality_status:
+    type: string
+    required: true
+    allowed_values:
+      - PASS
+      - WARN
+      - QUARANTINE
+      - BLOCK_RUN
+    purpose: Bronze-level quality status from raw validation.
+  quality_warnings:
+    type: array
+    required: true
+    purpose: Non-blocking quality warnings found during Bronze ingest.
+  quarantine_reasons:
+    type: array
+    required: true
+    purpose: Reasons why this record cannot continue to Silver.
+
+minimum_acceptance:
+  - Rerunning the same raw run must produce the same bronze_record_key set.
+  - Every Bronze row must trace back to source_file and source_line_number.
+  - Store mismatch must be quarantined at record level unless run context itself is invalid.
+  - Invalid JSON lines must be written to the quarantine output and counted in the manifest.

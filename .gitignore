@@ -1,0 +1,25 @@
+.venv/
+__pycache__/
+*.pyc
+.state/
+infra/airflow/.env
+.codegraph/
+.ipynb_checkpoints/
+docs/
+notebooks/
+
+# Crawler and lakehouse outputs are runtime data, never source code.
+raw/*
+!raw/.gitkeep
+warehouse/*
+!warehouse/.gitkeep
+warehouse_spark/*
+!warehouse_spark/.gitkeep
+warehouse_spark_docker/*
+!warehouse_spark_docker/.gitkeep
+warehouse_spark_debug/
+warehouse_spark_dimension_test/
+warehouse_spark_docker_phase3/
+
+# Local notes are not required to run the pipeline.
+I want an app that tracks.txt

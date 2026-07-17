@@ -1,0 +1,15 @@
+name: silver_promotion_item
+version: 1
+grain: one retailer product assigned to one observed product-level promotion offer
+record_key: promotion_item_id
+fields:
+  promotion_item_id: {type: string, required: true}
+  promotion_id: {type: string, required: true}
+  retailer_id: {type: string, required: true}
+  store_code: {type: string, required: true}
+  retailer_product_id: {type: string, required: true}
+  observation_id: {type: string, required: true}
+  observation_date: {type: date, required: true}
+  source_run_id: {type: string, required: true}
+  source_bronze_record_key: {type: string, required: true}
+  built_at: {type: timestamp, required: true}
