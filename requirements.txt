@@ -1,4 +1,4 @@
 requests==2.32.4
-beautifulsoup4==4.13.4
+beautifulsoup4==4.15.0
 playwright>=1.44,<2.0
 PyYAML>=6.0,<7.0
