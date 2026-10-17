@@ -13,7 +13,7 @@ from scrapers.common import adapt_products
 
 
 BASE_URL = "https://khuyenmai.mmvietnam.com"
-API_BASE_URL = "https://ebrochure-admin.digityze.asia/api/v2/products"
+API_BASE_URL = "https://ebrochure-admin.reputyze.asia/api/v2/products"
 PROMOTION_URL = f"{BASE_URL}/products?page=1"
 DEFAULT_STORE_CODE = "10010"
 DEFAULT_LANGUAGE = "vn"
